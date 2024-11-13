@@ -1,8 +1,9 @@
 package com.example.todolist.model
 
 interface TaskListService {
-    fun CreateTaskList(task: TaskList)
-    fun GetTaskList(id: Long)
-    fun ChangeTaskList(id: Long, newValue: TaskList)
-    fun DeleteTaskList(id: Long)
+
+    fun createTaskList(task: TaskList)
+    fun getTaskList(id: Int) : Result<TaskList>
+    fun changeTaskList(id: Int, newValue: TaskList)
+    fun deleteTaskList(id: Int)
 }
