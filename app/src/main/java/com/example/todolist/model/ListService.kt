@@ -81,11 +81,10 @@ class ListService {
 
     fun addTaskToList(task: Task, list: TaskList) {
         val index = data.lists.indexOf(list)
-        if (index == -1) {
-            return
-        }
+
 
         data.lists[index].addTask(task)
+        notifyChanges()
     }
 
     fun getTasksCount(list: TaskList) : Result<Int> {
@@ -98,10 +97,20 @@ class ListService {
     }
 
     fun loadLists(): List<TaskList> {
+        val taskList = mutableListOf<Task>()
+        taskList.add(Task(
+            id = 0,
+            name = "default task",
+            date = 0,
+            description = "",
+            isFavourite = false,
+            isComplited = false,
+            subtasks = mutableListOf()
+        ))
         data.lists = (1..9).map { TaskList(
             id = it,
             name = it.toString(),
-            tasks = mutableListOf(),
+            tasks = taskList,
             sortType = TaskList.SortType.DEFAULT,
             listType = TaskList.ListType.USER_LIST
         ) }.toMutableList()
@@ -137,6 +146,7 @@ class ListService {
             return
         }
         data.lists[index] = newValue
+        notifyChanges()
     }
 
     fun deleteList(list: TaskList) {

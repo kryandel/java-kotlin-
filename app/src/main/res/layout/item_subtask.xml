@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_task">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_uncheck_circle"
+            android:layout_gravity="start"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:id="@+id/itemSubtaskCompletePickerOFF"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check_circle"
+            android:layout_gravity="start"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:id="@+id/itemSubtaskCompletePickerON"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_gravity="start|center"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:text="@string/DefaultTaskName"
+            android:id="@+id/subtaskName"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_star_border"
+            android:layout_gravity="end"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:id="@+id/itemSubtaskFavouritePickerOFF"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_star"
+            android:layout_gravity="end"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:id="@+id/itemSubtaskFavouritePickerON"/>
+
+    </androidx.cardview.widget.CardView>
+
+</FrameLayout>

@@ -21,4 +21,5 @@
     <string name="NewTaskText">Новая задача</string>
     <string name="NewTaskAdditional">Добавьте дополнительную информацию</string>
     <string name="Save">Сохранить</string>
+    <string name="DefaultTaskName">DefaultTaskName</string>
 </resources>

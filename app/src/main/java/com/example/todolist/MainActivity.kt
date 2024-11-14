@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity(), Navigator {
             supportFragmentManager
                 .beginTransaction()
                 .add(R.id.fragmentContainer, ListFragment())
+                .add(R.id.fragmentContainer, SelectedListFragment())
                 .add(R.id.fragmentContainer, BottomPanelFragment())
                 .commit()
         }
