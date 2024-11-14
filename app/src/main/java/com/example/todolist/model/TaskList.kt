@@ -2,8 +2,9 @@ package com.example.todolist.model
 
 data class TaskList (
     val id: Int,
-    val name: String,
-    val tasks: MutableList<Task>
+    var name: String,
+    val tasks: MutableList<Task>,
+    var sortType: SortType
 ) {
     fun addTask(task: Task) {
         tasks.add(task)
@@ -36,5 +37,11 @@ data class TaskList (
         }
 
         tasks.removeAt(task_id)
+    }
+
+    enum class SortType {
+        DEFAULT,
+        DATE,
+        FAVOURITE
     }
 }

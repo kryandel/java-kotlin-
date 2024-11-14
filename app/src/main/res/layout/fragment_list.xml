@@ -14,4 +14,42 @@
         tools:listitem="@layout/item_list"
         tools:itemCount="10"/>
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="40dp"
+        android:layout_gravity="bottom">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_menu"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:layout_gravity="start"
+            android:contentDescription="@string/MoreButtonDescription"
+            android:id="@+id/buttonMore"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:layout_gravity="center"
+            android:contentDescription="@string/NewButtonDescription"
+            android:id="@+id/buttonNew"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_more_vertical"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:layout_gravity="end"
+            android:contentDescription="@string/DetailsButtonDescription"
+            android:id="@+id/buttonDetails"/>
+
+    </androidx.cardview.widget.CardView>
+
 </FrameLayout>

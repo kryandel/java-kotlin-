@@ -11,6 +11,4 @@ interface Navigator {
 
     fun goBack()
 
-    fun toast(messageRes: Int)
-
 }

@@ -37,7 +37,7 @@ class ListFragment : Fragment() {
             }
 
             override fun onListDetails(list: TaskList) {
-
+                navigator().showListDetails(list)
             }
 
         })

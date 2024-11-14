@@ -47,12 +47,11 @@ class ListAdapter(
         val list = v.tag as TaskList
         when (v.id) {
             R.id.list -> {
-                //actionListener.onListDetails(list)
-                showPopupMenu(v)
+                //showPopupMenu(v)
+                actionListener.onListDetails(list)
             }
             else -> {
                 //pass
-                //showPopupMenu(v)
             }
         }
     }

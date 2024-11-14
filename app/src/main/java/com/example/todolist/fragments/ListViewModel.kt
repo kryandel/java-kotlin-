@@ -3,9 +3,11 @@ package com.example.todolist.fragments
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.todolist.model.ListListener
 import com.example.todolist.model.ListService
 import com.example.todolist.model.TaskList
+import kotlinx.coroutines.launch
 
 class ListViewModel(
     private val listService: ListService
@@ -19,18 +21,18 @@ class ListViewModel(
     }
 
     init {
-        loadLists()
-    }
-
-    fun loadLists() {
         listService.addListener(listener)
+        viewModelScope.launch { loadLists() }
     }
 
-    fun moveList(list: TaskList, moveBy: Int) {
+    fun loadLists() =  viewModelScope.launch {
+    }
+
+    fun moveList(list: TaskList, moveBy: Int) =  viewModelScope.launch {
         listService.moveList(list, moveBy)
     }
 
-    fun deleteList(list: TaskList) {
+    fun deleteList(list: TaskList) =  viewModelScope.launch {
         listService.deleteList(list)
     }
 

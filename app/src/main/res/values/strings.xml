@@ -4,4 +4,14 @@
     <string name="PopupMenuAction_Delete">Delete</string>
     <string name="PopupMenuAction_MoveLeft">Move Left</string>
     <string name="PopupMenuAction_MoveRight">Move Right</string>
+    <string name="SortTitle">Сортировать</string>
+    <string name="SortType_Default">в моём порядке</string>
+    <string name="SortType_Date">по дате</string>
+    <string name="SortType_Favourite">недавно в избранном</string>
+    <string name="RenameList">Переименовать список</string>
+    <string name="DeleteList">Удалить список</string>
+    <string name="DeleteComplitedTasks">Удалить выполненные задачи</string>
+    <string name="MoreButtonDescription">All Lists button</string>
+    <string name="NewButtonDescription">New list button</string>
+    <string name="DetailsButtonDescription">List details button</string>
 </resources>

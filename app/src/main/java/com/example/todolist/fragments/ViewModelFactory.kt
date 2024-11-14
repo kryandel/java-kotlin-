@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.todolist.App
+import com.example.todolist.Navigator
 
 class ViewModelFactory(
     private val app: App
@@ -14,6 +15,9 @@ class ViewModelFactory(
             ListViewModel::class.java -> {
                 ListViewModel(app.taskListService)
             }
+            ListDetailsViewModel::class.java -> {
+                ListDetailsViewModel(app.taskListService)
+            }
             else -> {
                 throw java.lang.IllegalStateException("Unknown view model class")
             }
@@ -23,5 +27,3 @@ class ViewModelFactory(
     }
 
 }
-
-fun Fragment.factory() = ViewModelFactory(requireContext().applicationContext as App)
