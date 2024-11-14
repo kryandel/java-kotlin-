@@ -2,24 +2,21 @@ package com.example.todolist
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.AsyncListDiffer.ListListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.databinding.ActivityMainBinding
-import com.example.todolist.databinding.ItemListBinding
 import com.example.todolist.model.TaskList
-import com.example.todolist.model.TaskListListener
-import com.example.todolist.model.TaskListService
-import com.example.todolist.model.TaskListServiceImpl
+import com.example.todolist.model.ListListener
+import com.example.todolist.model.ListServiceImpl
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
-    private lateinit var adapter : TaskListAdapter
+    private lateinit var adapter : ListAdapter
 
-    private val taskListService: TaskListServiceImpl
+    private val taskListService: ListServiceImpl
         get() = (applicationContext as App).taskListService
 
-    private val taskListsListener: TaskListListener = {
+    private val taskListsListener: ListListener = {
         adapter.lists = it
     }
 
@@ -28,13 +25,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = TaskListAdapter(object : TaskListActionListener {
+        adapter = ListAdapter(object : ListActionListener {
             override fun onListMove(list: TaskList, moveBy: Int) {
                 //pass
             }
 
             override fun onListDelete(list: TaskList) {
-                taskListService.deleteTaskList(list)
+                taskListService.deleteList(list)
             }
 
             override fun onListDetails(list: TaskList) {
