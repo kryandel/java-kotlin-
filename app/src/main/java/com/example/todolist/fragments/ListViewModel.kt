@@ -14,6 +14,10 @@ class ListViewModel(
     private val _lists = MutableLiveData< List<TaskList> >()
     val lists: LiveData< List<TaskList> > = _lists
 
+    private val listener: ListListener = {
+        _lists.value = it
+    }
+
     init {
         loadLists()
     }
@@ -28,10 +32,6 @@ class ListViewModel(
 
     fun deleteList(list: TaskList) {
         listService.deleteList(list)
-    }
-
-    private val listener: ListListener = {
-        _lists.value = it
     }
 
     override fun onCleared() {
