@@ -3,11 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
+    android:addStatesFromChildren="true"
     android:id="@+id/item_task">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -30,8 +28,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:layout_marginStart="60dp"
-            android:layout_gravity="start|center"
+            android:layout_gravity="start|top"
             android:textSize="18sp"
             android:textColor="@color/black"
             android:text="@string/DefaultTaskName"
@@ -54,8 +53,6 @@
             android:scaleX="0.7"
             android:scaleY="0.7"
             android:id="@+id/itemTaskFavouritePickerON"/>
-
-    </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"

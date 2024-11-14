@@ -18,14 +18,12 @@ class SelectedListViewModel(
     val tasks: LiveData< List<Task> > = _tasks
 
     private val listener: ListListener = {
-        if (it.selectedList != null) {
-            _tasks.value = (it.selectedList as TaskList).tasks
-        }
+        _tasks.value = (it.selectedList as TaskList).tasks
     }
 
     init {
-        listService.addListener(listener)
         viewModelScope.launch { loadSelectedList() }
+        listService.addListener(listener)
     }
 
     fun loadSelectedList() = viewModelScope.launch {
@@ -33,6 +31,14 @@ class SelectedListViewModel(
         if (selectedList != null) {
             _tasks.value = selectedList.tasks
         }
+    }
+
+    fun changeCompleteStatus(task: Task, status: Boolean) {
+        listService.changeCompleteStatus(listService.getSelectedList().getOrThrow(), task, status)
+    }
+
+    fun changeFavouriteStatus(task: Task, status: Boolean) {
+        listService.changeFavouriteStatus(listService.getSelectedList().getOrThrow(), task, status)
     }
 
     override fun onCleared() {

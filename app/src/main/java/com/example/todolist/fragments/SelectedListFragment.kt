@@ -18,8 +18,6 @@ class SelectedListFragment : Fragment() {
     private lateinit var binding: FragmentSelectedListBinding
     private lateinit var adapter: TaskAdapter
 
-    //todo adapter
-
     private val viewModel: SelectedListViewModel by viewModels{ factory() }
 
     override fun onCreateView(
@@ -27,14 +25,14 @@ class SelectedListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSelectedListBinding.inflate(layoutInflater, container, false)
+        binding = FragmentSelectedListBinding.inflate(inflater, container, false)
         adapter = TaskAdapter(object : TaskActionListener {
             override fun changeFavouriteStatus(task: Task, status: Boolean) {
-                //TODO("Not yet implemented")
+                viewModel.changeFavouriteStatus(task, status)
             }
 
             override fun changeCompleteStatus(task: Task, status: Boolean) {
-                //TODO("Not yet implemented")
+                viewModel.changeCompleteStatus(task, status)
             }
 
             override fun showDetails(task: Task) {
@@ -50,7 +48,7 @@ class SelectedListFragment : Fragment() {
         val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.taskRecyclerView.layoutManager = layoutManager
         binding.taskRecyclerView.adapter = adapter
-        
+
         return binding.root
     }
 }

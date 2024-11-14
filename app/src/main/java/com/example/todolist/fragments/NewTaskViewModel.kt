@@ -15,8 +15,8 @@ class NewTaskViewModel(
     var favourite: Boolean = false
 
     fun createTask() {
-        listService.addTaskToList(
-            Task(
+        listService.addTask(
+            listService.getSelectedList().getOrThrow(), Task(
             id = listService.getTasksCount(listService.getSelectedList().getOrThrow()).getOrThrow(),
             name = name,
             date = date,
@@ -24,6 +24,7 @@ class NewTaskViewModel(
             isFavourite = favourite,
             isComplited = false,
             subtasks = mutableListOf()
-        ), listService.getSelectedList().getOrThrow())
+        )
+        )
     }
 }

@@ -65,32 +65,28 @@ class TaskAdapter(
                 itemTaskFavouritePickerON.isEnabled = false
             }
         }
+
+        holder.binding.taskName.setOnClickListener {
+            actionListener.showDetails(task)
+        }
+        holder.binding.itemTaskCompletePickerOFF.setOnClickListener {
+            actionListener.changeCompleteStatus(task, true)
+        }
+        holder.binding.itemTaskCompletePickerON.setOnClickListener {
+            actionListener.changeCompleteStatus(task, false)
+        }
+        holder.binding.itemTaskFavouritePickerOFF.setOnClickListener {
+            actionListener.changeFavouriteStatus(task, true)
+        }
+        holder.binding.itemTaskFavouritePickerON.setOnClickListener {
+            actionListener.changeFavouriteStatus(task, false)
+        }
+
     }
 
     override fun getItemCount(): Int = tasks.size
 
-    override fun onClick(v: View) {
-        val task = v.tag as Task
-
-        when (v.id) {
-            R.id.taskName -> { actionListener.showDetails(task) }
-            R.id.itemTaskCompletePickerON -> {
-                actionListener.changeCompleteStatus(task, false)
-                //todo status to subtasks
-            }
-            R.id.itemTaskCompletePickerOFF -> {
-                actionListener.changeCompleteStatus(task, true)
-                //todo status to subtasks
-            }
-            R.id.itemTaskFavouritePickerON -> {
-                actionListener.changeFavouriteStatus(task, false)
-            }
-            R.id.itemTaskFavouritePickerOFF -> {
-                actionListener.changeFavouriteStatus(task, true)
-            }
-            else -> {}
-        }
-    }
+    override fun onClick(v: View) {}
 
 
 }
