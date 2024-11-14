@@ -9,6 +9,8 @@ interface Navigator {
 
     fun showListDetails(list: TaskList)
 
+    fun showNewList()
+
     fun goBack()
 
 }

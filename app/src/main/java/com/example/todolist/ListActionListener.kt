@@ -6,4 +6,6 @@ interface ListActionListener {
 
     fun selectList(list: TaskList)
 
+    fun createNewList()
+
 }

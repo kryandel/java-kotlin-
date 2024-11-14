@@ -6,6 +6,7 @@ import com.example.todolist.databinding.ActivityMainBinding
 import com.example.todolist.fragments.BottomPanelFragment
 import com.example.todolist.fragments.ListDetailsFragment
 import com.example.todolist.fragments.ListFragment
+import com.example.todolist.fragments.NewListFragment
 import com.example.todolist.model.TaskList
 import com.example.todolist.model.Task
 
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity(), Navigator {
                 .beginTransaction()
                 .add(R.id.fragmentContainer, ListFragment())
                 .add(R.id.fragmentContainer, BottomPanelFragment())
+                //.add(R.id.fragmentContainer, NewListFragment())
                 .commit()
         }
     }
@@ -36,6 +38,14 @@ class MainActivity : AppCompatActivity(), Navigator {
             .beginTransaction()
             .addToBackStack(null)
             .replace(R.id.fragmentContainer, ListDetailsFragment.new(list.id))
+            .commit()
+    }
+
+    override fun showNewList() {
+        supportFragmentManager
+            .beginTransaction()
+            .addToBackStack(null)
+            .replace(R.id.fragmentContainer, NewListFragment())
             .commit()
     }
 

@@ -3,7 +3,7 @@ package com.example.todolist
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
-import android.view.View.OnClickListener
+import android.view.View.*
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
@@ -36,6 +36,11 @@ class ListAdapter(
         with(holder.binding) {
             holder.itemView.tag = list
             listName.text = list.name
+            if (position == lists.size - 1) {
+                imageAddList.visibility = VISIBLE
+            } else {
+                imageAddList.visibility = INVISIBLE
+            }
         }
     }
 
@@ -47,8 +52,14 @@ class ListAdapter(
         val list = v.tag as TaskList
         when (v.id) {
             R.id.list -> {
-                //showPopupMenu(v)
-                actionListener.selectList(list)
+                when(list.listType) {
+                    TaskList.ListType.NEW_BUTTON -> {
+                        actionListener.createNewList()
+                    }
+                    else -> {
+                        actionListener.selectList(list)
+                    }
+                }
             }
             else -> {
                 //pass

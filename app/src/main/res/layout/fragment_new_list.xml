@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/fragmentNewList">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="40dp"
+        android:id="@+id/topCardNewList">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_close"
+            android:contentDescription="@string/CloseButtonDescription_NewList"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:id="@+id/buttonClose"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:text="@string/CreateList"
+            android:textColor="@color/black"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center"
+            android:text="@string/Complete"
+            android:textColor="@color/material_dynamic_primary80"
+            android:textSize="16sp"
+            android:id="@+id/buttonComplete"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:minHeight="40dp"
+        android:inputType="text"
+        android:hint="@string/InputListNameHint"
+        android:textSize="16sp"
+        android:gravity="start|center"
+        android:importantForAutofill="no"
+        android:id="@+id/textField"/>
+
+</FrameLayout>
