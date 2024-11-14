@@ -4,6 +4,6 @@ interface TaskListService {
 
     fun createTaskList(task: TaskList)
     fun getTaskList(id: Int) : Result<TaskList>
-    fun changeTaskList(id: Int, newValue: TaskList)
-    fun deleteTaskList(id: Int)
+    fun changeTaskList(oldValue : TaskList, newValue: TaskList)
+    fun deleteTaskList(list : TaskList)
 }

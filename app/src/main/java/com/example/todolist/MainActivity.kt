@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.AsyncListDiffer.ListListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todolist.databinding.ActivityMainBinding
 import com.example.todolist.databinding.ItemListBinding
+import com.example.todolist.model.TaskList
 import com.example.todolist.model.TaskListListener
 import com.example.todolist.model.TaskListService
 import com.example.todolist.model.TaskListServiceImpl
@@ -27,9 +28,22 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = TaskListAdapter()
+        adapter = TaskListAdapter(object : TaskListActionListener {
+            override fun onListMove(list: TaskList, moveBy: Int) {
+                //pass
+            }
 
-        val layoutManager = LinearLayoutManager(this)
+            override fun onListDelete(list: TaskList) {
+                taskListService.deleteTaskList(list)
+            }
+
+            override fun onListDetails(list: TaskList) {
+                //pass
+            }
+
+        })
+
+        val layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.listsRecyclerView.layoutManager = layoutManager
         binding.listsRecyclerView.adapter = adapter
 

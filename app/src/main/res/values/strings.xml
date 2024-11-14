@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">ToDoList</string>
     <string name="DefaultListName">ListName</string>
+    <string name="PopupMenuAction_Delete">Delete</string>
+    <string name="PopupMenuAction_MoveLeft">Move Left</string>
+    <string name="PopupMenuAction_MoveRight">Move Right</string>
 </resources>

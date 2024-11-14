@@ -45,23 +45,21 @@ class TaskListServiceImpl : TaskListService {
         ))
     }
 
-    override fun changeTaskList(id: Int, newValue: TaskList) {
-        val list = getTaskList(id)
-        if (list.isFailure) {
+    override fun changeTaskList(oldValue : TaskList, newValue: TaskList) {
+        if (getTaskList(oldValue.id).isFailure) {
             return
         }
 
-        lists[id] = newValue
+        lists[oldValue.id] = newValue
         notifyChanges()
     }
 
-    override fun deleteTaskList(id: Int) {
-        val list = getTaskList(id)
-        if (list.isFailure) {
+    override fun deleteTaskList(list: TaskList) {
+        if (getTaskList(list.id).isFailure) {
             return
         }
 
-        lists.removeAt(id)
+        lists.remove(list)
         notifyChanges()
     }
 }
