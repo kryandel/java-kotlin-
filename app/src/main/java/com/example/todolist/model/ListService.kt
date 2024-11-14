@@ -79,6 +79,14 @@ class ListService {
         return data.lists.count()
     }
 
+    fun getFirst(): TaskList = data.lists.first()
+
+    fun getLast() : TaskList = data.lists.last()
+
+    fun sortSelectedList(type: TaskList.SortType) {
+        //todo
+    }
+
     fun addTask(list: TaskList, task: Task) {
         val index = data.lists.indexOf(list)
 
@@ -98,7 +106,7 @@ class ListService {
         val listIndex = data.lists.indexOf(list)
         val taskIndex = data.lists[listIndex].tasks.indexOf(task)
 
-        data.lists[listIndex].tasks[taskIndex].isComplited = status
+        data.lists[listIndex].tasks[taskIndex].isCompleted = status
         notifyChanges()
     }
 
@@ -107,7 +115,7 @@ class ListService {
         val taskIndex = data.lists[listIndex].tasks.indexOf(task)
         val subtaskIndex = data.lists[listIndex].tasks[taskIndex].subtasks.indexOf(subtask)
 
-        data.lists[listIndex].tasks[taskIndex].subtasks[subtaskIndex].isComplited = status
+        data.lists[listIndex].tasks[taskIndex].subtasks[subtaskIndex].isCompleted = status
         notifyChanges()
     }
 
@@ -138,7 +146,21 @@ class ListService {
     }
 
     fun loadLists(): List<TaskList> {
-        data.lists = (1..9).map { TaskList(
+        data.lists.add(TaskList(
+            id = 0,
+            name = "Favourite",
+            tasks = mutableListOf(),
+            sortType = TaskList.SortType.DEFAULT,
+            listType = TaskList.ListType.FAVOURITE
+        ))
+        data.lists.add(TaskList(
+            id = 1,
+            name = "Создать список",
+            tasks = mutableListOf(),
+            sortType = TaskList.SortType.DEFAULT,
+            listType = TaskList.ListType.NEW_BUTTON
+        ))
+        /*data.lists = (1..9).map { TaskList(
             id = it,
             name = it.toString(),
             tasks = mutableListOf(
@@ -148,7 +170,8 @@ class ListService {
                     date = 0,
                     description = "",
                     isFavourite = (it % 2) == 1,
-                    isComplited = (it % 2) == 0,
+                    isCompleted = (it % 2) == 0,
+                    isSubtask = false,
                     subtasks = mutableListOf()
                 )),
             sortType = TaskList.SortType.DEFAULT,
@@ -161,23 +184,12 @@ class ListService {
             tasks = mutableListOf(),
             sortType = TaskList.SortType.DEFAULT,
             listType = TaskList.ListType.NEW_BUTTON
-        ))
+        ))*/
 
         dataLoaded = true
         data.selectedList = data.lists[0]
         notifyChanges()
         return data.lists
-    }
-
-    fun moveList(list: TaskList, moveBy: Int) {
-        if (getList(list.id).isFailure) {
-            return
-        }
-
-        val index = data.lists.indexOf(list)
-
-        Collections.swap(data.lists, index, index + moveBy)
-        notifyChanges()
     }
 
     fun changeList(oldValue: TaskList, newValue: TaskList) {

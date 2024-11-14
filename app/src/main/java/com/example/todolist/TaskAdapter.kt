@@ -37,7 +37,7 @@ class TaskAdapter(
         with (holder.binding) {
             holder.itemView.tag = task
             taskName.text = task.name
-            if (task.isComplited) {
+            if (task.isCompleted) {
                 itemTaskCompletePickerOFF.isVisible = false
                 itemTaskCompletePickerOFF.isEnabled = false
 

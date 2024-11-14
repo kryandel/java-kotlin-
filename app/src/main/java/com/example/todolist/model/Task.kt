@@ -1,14 +1,13 @@
 package com.example.todolist.model
 
-import java.sql.Date
-
 data class Task (
     val id: Int,
     var name: String,
     var date: Long,
     var description : String,
     var isFavourite: Boolean,
-    var isComplited: Boolean,
+    var isCompleted: Boolean,
+    var isSubtask: Boolean,
     val subtasks: MutableList<Task>,
 ) {
     fun addSubTask(task: Task) {

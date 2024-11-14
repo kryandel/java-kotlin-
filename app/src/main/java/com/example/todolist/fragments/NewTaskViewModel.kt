@@ -22,7 +22,8 @@ class NewTaskViewModel(
             date = date,
             description = description,
             isFavourite = favourite,
-            isComplited = false,
+            isCompleted = false,
+            isSubtask = false,
             subtasks = mutableListOf()
         )
         )

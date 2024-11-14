@@ -35,6 +35,10 @@ class ListDetailsViewModel(
         listService.deleteList(list)
     }
 
+    fun getFirst(): TaskList = listService.getFirst()
+
+    fun getLast(): TaskList = listService.getLast()
+
     fun deleteCompletedTasks() {
 
     }

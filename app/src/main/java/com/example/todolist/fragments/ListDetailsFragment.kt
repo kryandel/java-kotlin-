@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.example.todolist.ListAdapter
 import com.example.todolist.R
 import com.example.todolist.databinding.FragmentListDetailsBinding
 import com.example.todolist.model.TaskList
@@ -15,7 +14,6 @@ import com.example.todolist.model.TaskList
 class ListDetailsFragment : Fragment() {
 
     private lateinit var binding : FragmentListDetailsBinding
-    private lateinit var adapter: ListAdapter
 
     private val viewModel: ListDetailsViewModel by viewModels{ factory() }
 
@@ -33,8 +31,9 @@ class ListDetailsFragment : Fragment() {
 
         viewModel.listDetails.observe(viewLifecycleOwner, Observer {
             binding.deleteListButton.isEnabled = it.id > 1
-            binding.deleteComplitedTasksButton.isEnabled = it.tasks.any { task -> task.isComplited }
+            binding.deleteComplitedTasksButton.isEnabled = it.tasks.any { task -> task.isCompleted }
             binding.sortButton.isEnabled = it.sortType == TaskList.SortType.DEFAULT
+            binding.renameButton.isEnabled
             binding.sortType.text = when (it.sortType) {
                 TaskList.SortType.DATE -> {
                     resources.getString(R.string.SortType_Date)
