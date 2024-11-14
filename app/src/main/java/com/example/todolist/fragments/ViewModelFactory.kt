@@ -18,6 +18,9 @@ class ViewModelFactory(
             ListDetailsViewModel::class.java -> {
                 ListDetailsViewModel(app.taskListService)
             }
+            BottomPanelViewModel::class.java -> {
+                BottomPanelViewModel(app.taskListService)
+            }
             else -> {
                 throw java.lang.IllegalStateException("Unknown view model class")
             }

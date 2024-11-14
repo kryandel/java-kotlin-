@@ -28,18 +28,9 @@ class ListFragment : Fragment() {
     ): View? {
         binding = FragmentListBinding.inflate(inflater, container, false)
         adapter = ListAdapter(object : ListActionListener {
-            override fun onListMove(list: TaskList, moveBy: Int) {
-                viewModel.moveList(list, moveBy)
+            override fun selectList(list: TaskList) {
+                viewModel.selectList(list)
             }
-
-            override fun onListDelete(list: TaskList) {
-                viewModel.deleteList(list)
-            }
-
-            override fun onListDetails(list: TaskList) {
-                navigator().showListDetails(list)
-            }
-
         })
 
         viewModel.lists.observe(viewLifecycleOwner, Observer {

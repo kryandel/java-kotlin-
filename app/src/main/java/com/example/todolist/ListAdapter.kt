@@ -48,51 +48,12 @@ class ListAdapter(
         when (v.id) {
             R.id.list -> {
                 //showPopupMenu(v)
-                actionListener.onListDetails(list)
+                actionListener.selectList(list)
             }
             else -> {
                 //pass
             }
         }
-    }
-
-    fun showPopupMenu(view: View) {
-        val popupMenu = PopupMenu(view.context, view)
-        val context = view.context
-        val list = view.tag as TaskList
-        val index = lists.indexOfFirst { it.id == list.id }
-
-        popupMenu.menu.add(0, DELETE, Menu.NONE, context.getString(R.string.PopupMenuAction_Delete))
-        popupMenu.menu.add(0, MOVE_LEFT, Menu.NONE, context.getString(R.string.PopupMenuAction_MoveLeft)).apply {
-            isEnabled = index > 1
-        }
-        popupMenu.menu.add(0, MOVE_RIGHT, Menu.NONE, context.getString(R.string.PopupMenuAction_MoveRight)).apply {
-            isEnabled = index < lists.size - 2
-        }
-
-        popupMenu.setOnMenuItemClickListener {
-            when (it.itemId) {
-                DELETE -> {
-                    actionListener.onListDelete(list)
-                }
-                MOVE_LEFT -> {
-                    actionListener.onListMove(list, -1)
-                }
-                MOVE_RIGHT -> {
-                    actionListener.onListMove(list, 1)
-                }
-                else -> {}
-            }
-            return@setOnMenuItemClickListener true
-        }
-
-        popupMenu.show()
-    }
-
-    companion object {
-        private const val MOVE_LEFT = 1
-        private const val MOVE_RIGHT = 2
-        private const val DELETE = 3
     }
 
 }

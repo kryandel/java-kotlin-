@@ -2,11 +2,19 @@ package com.example.todolist.model
 
 import java.util.Collections
 
-typealias ListListener = (lists : List<TaskList>) -> Unit
+typealias ListListener = (data : ListService.ListServiceData) -> Unit
 
 class ListService {
 
-    private var lists = mutableListOf<TaskList>()
+    data class ListServiceData (
+        var lists: MutableList<TaskList>,
+        var selectedList: TaskList?
+    )
+
+    private var data = ListServiceData(
+        lists = mutableListOf(),
+        selectedList = null
+    )
 
     private var listeners = mutableSetOf<ListListener>()
 
@@ -19,7 +27,7 @@ class ListService {
     fun addListener(listener : ListListener) {
         listeners.add(listener)
         if (dataLoaded) {
-            listener.invoke(lists)
+            listener.invoke(data)
         }
     }
 
@@ -29,19 +37,32 @@ class ListService {
 
     private fun notifyChanges() {
         if (dataLoaded) {
-            listeners.forEach { it.invoke(lists) }
+            listeners.forEach { it.invoke(data) }
         }
     }
 
     fun createList(task: TaskList) {
-        lists.add(task)
+        data.lists.add(task)
         notifyChanges()
     }
 
+    fun selectList(list: TaskList) {
+        data.selectedList = list
+        notifyChanges()
+    }
+
+    fun getSelectedList() : Result<TaskList> {
+        if (data.selectedList != null) {
+            return Result.success(data.selectedList as TaskList)
+        } else {
+            return Result.failure(java.util.NoSuchElementException("No selected element"))
+        }
+    }
+
     fun getList(id: Int) : Result<TaskList> {
-        val index = lists.indexOfFirst { it.id == id }
+        val index = data.lists.indexOfFirst { it.id == id }
         if (index != -1) {
-            return Result.success(lists[index])
+            return Result.success(data.lists[index])
         }
 
         return Result.failure(ArrayIndexOutOfBoundsException(
@@ -50,7 +71,7 @@ class ListService {
     }
 
     fun loadLists(): List<TaskList> {
-        lists = (1..100).map { TaskList(
+        data.lists = (1..100).map { TaskList(
             id = it,
             name = it.toString(),
             tasks = mutableListOf<Task>(),
@@ -58,8 +79,9 @@ class ListService {
         ) }.toMutableList()
 
         dataLoaded = true
+        data.selectedList = data.lists[0]
         notifyChanges()
-        return lists
+        return data.lists
     }
 
     fun moveList(list: TaskList, moveBy: Int) {
@@ -67,18 +89,18 @@ class ListService {
             return
         }
 
-        val index = lists.indexOf(list)
+        val index = data.lists.indexOf(list)
 
-        Collections.swap(lists, index, index + moveBy)
+        Collections.swap(data.lists, index, index + moveBy)
         notifyChanges()
     }
 
     fun changeList(oldValue: TaskList, newValue: TaskList) {
-        val index = lists.indexOf(oldValue)
+        val index = data.lists.indexOf(oldValue)
         if (index == -1) {
             return
         }
-        lists[index] = newValue
+        data.lists[index] = newValue
     }
 
     fun deleteList(list: TaskList) {
@@ -86,7 +108,7 @@ class ListService {
             return
         }
 
-        lists.remove(list)
+        data.lists.remove(list)
         notifyChanges()
     }
 }

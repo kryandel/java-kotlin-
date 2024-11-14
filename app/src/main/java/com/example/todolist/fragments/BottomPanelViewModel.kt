@@ -9,27 +9,23 @@ import com.example.todolist.model.ListService
 import com.example.todolist.model.TaskList
 import kotlinx.coroutines.launch
 
-class ListViewModel(
+class BottomPanelViewModel(
     private val listService: ListService
 ) : ViewModel() {
 
-    private val _lists = MutableLiveData< List<TaskList> >()
-    val lists: LiveData< List<TaskList> > = _lists
+    private val _list = MutableLiveData< TaskList? >()
+    val list: LiveData< TaskList? > = _list
 
     private val listener: ListListener = {
-        _lists.value = it.lists
+        _list.value = it.selectedList
+    }
+
+    init {
+        _list.value = listService.getSelectedList().getOrNull()
     }
 
     init {
         listService.addListener(listener)
-        viewModelScope.launch { loadLists() }
-    }
-
-    fun loadLists() =  viewModelScope.launch {
-    }
-
-    fun selectList(list: TaskList) {
-        listService.selectList(list)
     }
 
     override fun onCleared() {

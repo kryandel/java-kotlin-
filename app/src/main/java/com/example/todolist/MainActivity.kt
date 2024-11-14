@@ -3,6 +3,7 @@ package com.example.todolist
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.todolist.databinding.ActivityMainBinding
+import com.example.todolist.fragments.BottomPanelFragment
 import com.example.todolist.fragments.ListDetailsFragment
 import com.example.todolist.fragments.ListFragment
 import com.example.todolist.model.TaskList
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity(), Navigator {
             supportFragmentManager
                 .beginTransaction()
                 .add(R.id.fragmentContainer, ListFragment())
+                .add(R.id.fragmentContainer, BottomPanelFragment())
                 .commit()
         }
     }
