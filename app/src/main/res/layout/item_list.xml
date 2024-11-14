@@ -19,7 +19,7 @@
         android:layout_height="30dp"
         android:layout_marginStart="110dp"
         android:src="@drawable/ic_add"
-        android:visibility="gone"
+        android:visibility="invisible"
         android:id="@+id/imageAddList"/>
 
 </FrameLayout>

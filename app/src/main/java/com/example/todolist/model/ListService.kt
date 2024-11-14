@@ -43,6 +43,7 @@ class ListService {
 
     fun createList(task: TaskList) {
         data.lists.add(task)
+        Collections.swap(data.lists, data.lists.size - 1, data.lists.size - 2)
         notifyChanges()
     }
 
@@ -70,13 +71,48 @@ class ListService {
         ))
     }
 
+    fun getLists() : List<TaskList> {
+        return data.lists
+    }
+
+    fun getListsCount() : Int {
+        return data.lists.count()
+    }
+
+    fun addTaskToList(task: Task, list: TaskList) {
+        val index = data.lists.indexOf(list)
+        if (index == -1) {
+            return
+        }
+
+        data.lists[index].addTask(task)
+    }
+
+    fun getTasksCount(list: TaskList) : Result<Int> {
+        val index = data.lists.indexOf(list)
+        if (index == -1) {
+            return Result.failure(ArrayIndexOutOfBoundsException("Not found list"))
+        }
+
+        return Result.success(data.lists[index].tasks.size)
+    }
+
     fun loadLists(): List<TaskList> {
-        data.lists = (1..100).map { TaskList(
+        data.lists = (1..9).map { TaskList(
             id = it,
             name = it.toString(),
-            tasks = mutableListOf<Task>(),
-            sortType = TaskList.SortType.DEFAULT
+            tasks = mutableListOf(),
+            sortType = TaskList.SortType.DEFAULT,
+            listType = TaskList.ListType.USER_LIST
         ) }.toMutableList()
+
+        data.lists.add(TaskList(
+            id = 10,
+            name = "Создать список",
+            tasks = mutableListOf(),
+            sortType = TaskList.SortType.DEFAULT,
+            listType = TaskList.ListType.NEW_BUTTON
+        ))
 
         dataLoaded = true
         data.selectedList = data.lists[0]

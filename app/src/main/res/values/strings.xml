@@ -14,4 +14,11 @@
     <string name="MoreButtonDescription">All Lists button</string>
     <string name="NewButtonDescription">New list button</string>
     <string name="DetailsButtonDescription">List details button</string>
+    <string name="CreateList">Создание списка</string>
+    <string name="CloseButtonDescription_NewList">Close button for create list fragment</string>
+    <string name="Complete">Готово</string>
+    <string name="InputListNameHint">Введите название списка</string>
+    <string name="NewTaskText">Новая задача</string>
+    <string name="NewTaskAdditional">Добавьте дополнительную информацию</string>
+    <string name="Save">Сохранить</string>
 </resources>

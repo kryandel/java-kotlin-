@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/fragmentNewTask">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="40dp"
+        android:inputType="text"
+        android:hint="@string/NewTaskText"
+        android:textSize="16sp"
+        android:gravity="start|center"
+        android:importantForAutofill="no"
+        android:id="@+id/textFieldNewTaskName"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:minHeight="40dp"
+        android:inputType="text"
+        android:hint="@string/NewTaskAdditional"
+        android:textSize="12sp"
+        android:gravity="start|center"
+        android:importantForAutofill="no"
+        android:id="@+id/textFieldNewTaskDescription"/>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:minHeight="40dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_calendar"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:id="@+id/buttonPickDate"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_star_border"
+            android:layout_marginStart="50dp"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:id="@+id/buttonPickFavouriteOFF"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_star"
+            android:layout_marginStart="50dp"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:id="@+id/buttonPickFavouriteON"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:text="@string/Save"
+            android:layout_gravity="end|center"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:id="@+id/buttonSafeTask"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <DatePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="140dp"
+        android:layout_gravity="center|top"
+        android:visibility="invisible"
+        android:id="@+id/datePicker"/>
+
+</FrameLayout>

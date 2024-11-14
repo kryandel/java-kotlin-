@@ -29,8 +29,8 @@ class NewListFragment : Fragment() {
 
         binding.buttonComplete.isEnabled = false
 
-        binding.textField.doOnTextChanged { text, _, _, _ ->
-            if (text == null || text.toString().isEmpty()) {
+        binding.textFieldNewList.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty()) {
                 binding.buttonComplete.isEnabled = false
                 viewModel.name = String()
             } else {

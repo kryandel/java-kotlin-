@@ -11,6 +11,8 @@ interface Navigator {
 
     fun showNewList()
 
+    fun showNewTask()
+
     fun goBack()
 
 }

@@ -33,7 +33,7 @@ class BottomPanelFragment : Fragment() {
         }
 
         binding.buttonNew.setOnClickListener {
-            //todo create empty list
+            navigator().showNewTask()
         }
 
         return binding.root

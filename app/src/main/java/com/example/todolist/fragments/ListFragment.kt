@@ -31,6 +31,10 @@ class ListFragment : Fragment() {
             override fun selectList(list: TaskList) {
                 viewModel.selectList(list)
             }
+
+            override fun createNewList() {
+                navigator().showNewList()
+            }
         })
 
         viewModel.lists.observe(viewLifecycleOwner, Observer {

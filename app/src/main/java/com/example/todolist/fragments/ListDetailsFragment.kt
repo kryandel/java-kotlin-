@@ -49,7 +49,7 @@ class ListDetailsFragment : Fragment() {
         })
 
         binding.sortButton.setOnClickListener {
-
+            //todo
         }
 
         binding.renameButton.setOnClickListener {}

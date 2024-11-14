@@ -6,8 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todolist.model.ListListener
 import com.example.todolist.model.ListService
+import com.example.todolist.model.Task
 import com.example.todolist.model.TaskList
 import kotlinx.coroutines.launch
+import java.sql.Date
+import java.time.LocalDate
 
 class BottomPanelViewModel(
     private val listService: ListService
@@ -22,9 +25,6 @@ class BottomPanelViewModel(
 
     init {
         _list.value = listService.getSelectedList().getOrNull()
-    }
-
-    init {
         listService.addListener(listener)
     }
 

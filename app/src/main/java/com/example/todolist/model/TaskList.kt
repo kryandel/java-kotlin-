@@ -4,7 +4,8 @@ data class TaskList (
     val id: Int,
     var name: String,
     val tasks: MutableList<Task>,
-    var sortType: SortType
+    var sortType: SortType,
+    var listType: ListType
 ) {
     fun addTask(task: Task) {
         tasks.add(task)
@@ -43,5 +44,11 @@ data class TaskList (
         DEFAULT,
         DATE,
         FAVOURITE
+    }
+
+    enum class ListType {
+        USER_LIST,
+        FAVOURITE,
+        NEW_BUTTON
     }
 }

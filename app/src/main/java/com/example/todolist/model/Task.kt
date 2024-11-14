@@ -5,11 +5,11 @@ import java.sql.Date
 data class Task (
     val id: Int,
     var name: String,
-    var date: Date,
+    var date: Long,
     var description : String,
     var isFavourite: Boolean,
     var isComplited: Boolean,
-    val subtasks: MutableList<Task>
+    val subtasks: MutableList<Task>,
 ) {
     fun addSubTask(task: Task) {
         subtasks.add(task)

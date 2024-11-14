@@ -49,6 +49,6 @@
         android:textSize="16sp"
         android:gravity="start|center"
         android:importantForAutofill="no"
-        android:id="@+id/textField"/>
+        android:id="@+id/textFieldNewList"/>
 
 </FrameLayout>

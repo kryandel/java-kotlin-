@@ -24,6 +24,9 @@ class ViewModelFactory(
             NewListViewModel::class.java -> {
                 NewListViewModel(app.taskListService)
             }
+            NewTaskViewModel::class.java -> {
+                NewTaskViewModel(app.taskListService)
+            }
             else -> {
                 throw java.lang.IllegalStateException("Unknown view model class")
             }
