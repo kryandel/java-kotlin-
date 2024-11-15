@@ -33,7 +33,7 @@ class ListDetailsFragment : Fragment() {
             binding.deleteListButton.isEnabled = it.id > 1
             binding.deleteComplitedTasksButton.isEnabled = it.tasks.any { task -> task.isCompleted }
             binding.sortButton.isEnabled = it.sortType == TaskList.SortType.DEFAULT
-            binding.renameButton.isEnabled
+            binding.renameButton.isEnabled = it.id > 1
             binding.sortType.text = when (it.sortType) {
                 TaskList.SortType.DATE -> {
                     resources.getString(R.string.SortType_Date)

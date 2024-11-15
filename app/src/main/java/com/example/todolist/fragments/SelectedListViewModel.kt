@@ -26,6 +26,8 @@ class SelectedListViewModel(
         listService.addListener(listener)
     }
 
+    fun getList() = listService.getSelectedList().getOrNull()
+
     fun loadSelectedList() = viewModelScope.launch {
         val selectedList = listService.getSelectedList().getOrNull()
         if (selectedList != null) {

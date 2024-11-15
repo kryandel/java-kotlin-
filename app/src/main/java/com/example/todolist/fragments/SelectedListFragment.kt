@@ -12,6 +12,7 @@ import com.example.todolist.TaskActionListener
 import com.example.todolist.TaskAdapter
 import com.example.todolist.databinding.FragmentSelectedListBinding
 import com.example.todolist.model.Task
+import com.example.todolist.model.TaskList
 
 class SelectedListFragment : Fragment() {
 
@@ -36,7 +37,9 @@ class SelectedListFragment : Fragment() {
             }
 
             override fun showDetails(task: Task) {
-                navigator().showTaskDetails(task)
+                if (viewModel.getList() != null) {
+                    navigator().showTaskDetails(viewModel.getList() as TaskList, task)
+                }
             }
 
         })

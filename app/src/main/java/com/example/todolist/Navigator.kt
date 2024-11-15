@@ -5,7 +5,7 @@ import com.example.todolist.model.TaskList
 
 interface Navigator {
 
-    fun showTaskDetails(task: Task)
+    fun showTaskDetails(list: TaskList, task: Task)
 
     fun showListDetails(list: TaskList)
 

@@ -26,8 +26,12 @@ class MainActivity : AppCompatActivity(), Navigator {
         }
     }
 
-    override fun showTaskDetails(task: Task) {
-        //TODO("Not yet implemented")
+    override fun showTaskDetails(list: TaskList, task: Task) {
+        supportFragmentManager
+            .beginTransaction()
+            .addToBackStack(null)
+            .replace(R.id.fragmentContainer, TaskDetailsFragment.new(list.id, task.id))
+            .commit()
     }
 
     override fun showListDetails(list: TaskList) {

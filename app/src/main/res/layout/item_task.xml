@@ -62,13 +62,4 @@
 
         </androidx.cardview.widget.CardView>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="50dp"
-        tools:listitem="@layout/item_subtask"
-        tools:itemCount="5"
-        android:id="@+id/subtaskRecyclerView"/>
-
 </FrameLayout>

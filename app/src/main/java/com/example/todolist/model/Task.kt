@@ -11,11 +11,11 @@ data class Task (
     var parentTask: Task?,
     val subtasks: MutableList<Task>,
 ) {
-    fun addSubTask(task: Task) {
-        subtasks.add(task)
+    fun addSubtask(subtask: Task) {
+        subtasks.add(subtask)
     }
 
-    fun getSubTask(subtask: Task) : Result<Task> {
+    fun getSubtask(subtask: Task) : Result<Task> {
         val index = subtasks.indexOf(subtask)
         if (index == -1) {
             return Result.failure(ArrayIndexOutOfBoundsException())
@@ -24,11 +24,11 @@ data class Task (
         return Result.success(subtasks[index])
     }
 
-    fun changeSubTask(task_id: Int, new_value: Task) {
-        //todo?
+    fun changeSubtask(subtask_id: Int, new_value: Task) {
+        subtasks[subtask_id] = new_value
     }
 
-    fun deleteSubTask(task: Task) {
-        //todo?
+    fun deleteSubtask(subtask: Task) {
+        subtasks.remove(subtask)
     }
 }
