@@ -1,12 +1,13 @@
 package com.example.todolist.model
 
 data class TaskList (
-    val id: Int,
-    var name: String,
-    val tasks: MutableList<Task>,
-    var sortType: SortType,
-    var listType: ListType
+    val id: Int = -1,
+    var name: String = "",
+    val tasks: MutableList<Task> = mutableListOf(),
+    var sortType: SortType = SortType.DEFAULT,
+    var listType: ListType = ListType.USER_LIST
 ) {
+
     fun toMap() = hashMapOf(
         "id" to id,
         "name" to name,

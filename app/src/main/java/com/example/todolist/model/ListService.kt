@@ -1,13 +1,18 @@
 package com.example.todolist.model
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 import java.util.Collections
+import kotlin.random.Random
 
 typealias ListListener = (data : ListService.ListServiceData) -> Unit
 
 class ListService(
     private val database: FirebaseFirestore
 ) {
+
+    private val TAG = "LISTS"
 
     data class ListServiceData (
         var lists: MutableList<TaskList>,
@@ -26,8 +31,104 @@ class ListService(
     private val favouriteIndex = 0
 
     init {
+        database.collection(TAG).addSnapshotListener { result, error ->
+            if (error != null) {
+                Log.d(TAG, "LISTEN FAILED: $error")
+                return@addSnapshotListener
+            }
+
+            if (result != null) {
+                val lists = mutableListOf<TaskList>()
+                result.forEach { doc ->
+                    lists.add(doc.toObject())
+                    Log.d(TAG, "(Update data) Read document: ${doc.id}")
+                }
+                if (lists.isNotEmpty()) {
+                    data.lists = lists
+                }
+            }
+            notifyChanges()
+        }
+
         loadLists()
     }
+
+    private fun loadLists() {
+        data.lists.add(createFavouriteList())
+        data.lists.add(createCreateList())
+        data.selectedList = data.lists[0]
+
+        loadFromFirestore()
+
+        notifyChanges()
+    }
+
+    private fun loadFromFirestore() {
+        val lists = mutableListOf<TaskList>()
+        database.collection(TAG).get().addOnCompleteListener {
+            if (it.isSuccessful) {
+                for (doc in it.result) {
+                    lists.add(doc.toObject())
+                    Log.d(TAG, "Read document: ${doc.id}")
+                }
+            }
+
+            if (lists.isNotEmpty()) {
+                data.lists = lists
+                dataLoaded = true
+                notifyChanges()
+            } else {
+                initializeLists()
+            }
+        }.addOnFailureListener {
+            Log.d(TAG, "FAILED TO LOAD LISTS ${it.message}")
+        }
+    }
+
+    private fun saveListOnDatabase(list: TaskList) {
+        saveListOnFirestore(list)
+    }
+
+    private fun saveListOnFirestore(list: TaskList) {
+        database.collection(TAG).add(list).addOnSuccessListener {
+            Log.d(TAG, "Added favourite document: ${it.id}")
+        }
+    }
+
+    private fun initializeLists() {
+        database
+            .collection(TAG)
+            .add(createFavouriteList()).addOnSuccessListener {
+                Log.d(TAG, "Added favourite document: ${it.id}")
+            }
+        database
+            .collection(TAG)
+            .add(createCreateList()).addOnSuccessListener {
+                Log.d(TAG, "Added create document: ${it.id}")
+            }
+    }
+
+    private fun createFavouriteList() : TaskList {
+        return TaskList(
+            id = getNextId(),
+            name = "Favourite",
+            tasks = mutableListOf(),
+            sortType = TaskList.SortType.DEFAULT,
+            listType = TaskList.ListType.FAVOURITE
+        )
+    }
+
+    private fun createCreateList(): TaskList {
+        return TaskList(
+            id = getNextId(),
+            name = "Создать список",
+            tasks = mutableListOf(),
+            sortType = TaskList.SortType.DEFAULT,
+            listType = TaskList.ListType.NEW_BUTTON
+        )
+    }
+
+    fun getNextId() = Random.nextInt()
 
     fun addListener(listener : ListListener) {
         listeners.add(listener)
@@ -46,8 +147,9 @@ class ListService(
         }
     }
 
-    fun createList(task: TaskList) {
-        data.lists.add(task)
+    fun createList(list: TaskList) {
+        //data.lists.add(task)
+        saveListOnDatabase(list)
         Collections.swap(data.lists, data.lists.size - 1, data.lists.size - 2)
         notifyChanges()
     }
@@ -206,29 +308,6 @@ class ListService(
         }
 
         return Result.success(data.lists[index].tasks.size)
-    }
-
-    fun loadLists(): List<TaskList> {
-        data.lists.add(TaskList(
-            id = 0,
-            name = "Favourite",
-            tasks = mutableListOf(),
-            sortType = TaskList.SortType.DEFAULT,
-            listType = TaskList.ListType.FAVOURITE
-        ))
-
-        data.lists.add(TaskList(
-            id = 1,
-            name = "Создать список",
-            tasks = mutableListOf(),
-            sortType = TaskList.SortType.DEFAULT,
-            listType = TaskList.ListType.NEW_BUTTON
-        ))
-
-        dataLoaded = true
-        data.selectedList = data.lists[0]
-        notifyChanges()
-        return data.lists
     }
 
     fun changeList(oldValue: TaskList, newValue: TaskList) {
