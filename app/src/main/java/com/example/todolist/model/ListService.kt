@@ -20,6 +20,8 @@ class ListService {
 
     private var dataLoaded = false
 
+    private val favouriteIndex = 0
+
     init {
         loadLists()
     }
@@ -90,6 +92,10 @@ class ListService {
     fun addTask(list: TaskList, task: Task) {
         val index = data.lists.indexOf(list)
 
+        if (task.isFavourite) {
+            data.lists[favouriteIndex].addTask(task)
+        }
+
         data.lists[index].addTask(task)
         notifyChanges()
     }
@@ -97,6 +103,10 @@ class ListService {
     fun addSubTask(list: TaskList, task: Task, subtask: Task) {
         val listIndex = data.lists.indexOf(list)
         val taskIndex = data.lists[listIndex].tasks.indexOf(task)
+
+        if (subtask.isFavourite) {
+            data.lists[favouriteIndex].addTask(subtask)
+        }
 
         data.lists[listIndex].tasks[taskIndex].subtasks.add(subtask)
         notifyChanges()
@@ -122,8 +132,16 @@ class ListService {
     fun changeFavouriteStatus(list: TaskList, task: Task, status: Boolean) {
         val listIndex = data.lists.indexOf(list)
         val taskIndex = data.lists[listIndex].tasks.indexOf(task)
+        val oldStatus = data.lists[listIndex].tasks[taskIndex].isFavourite
 
         data.lists[listIndex].tasks[taskIndex].isFavourite = status
+
+        if (oldStatus && !status) {
+            data.lists[favouriteIndex].deleteTask(data.lists[listIndex].tasks[taskIndex])
+        } else if (!oldStatus && status) {
+            data.lists[favouriteIndex].addTask(data.lists[listIndex].tasks[taskIndex])
+        }
+
         notifyChanges()
     }
 
@@ -131,8 +149,19 @@ class ListService {
         val listIndex = data.lists.indexOf(list)
         val taskIndex = data.lists[listIndex].tasks.indexOf(task)
         val subtaskIndex = data.lists[listIndex].tasks[taskIndex].subtasks.indexOf(subtask)
+        val oldStatus = data.lists[listIndex].tasks[taskIndex].subtasks[subtaskIndex].isFavourite
 
         data.lists[listIndex].tasks[taskIndex].subtasks[subtaskIndex].isFavourite = status
+        if (oldStatus && !status) {
+            data.lists[favouriteIndex].deleteTask(
+                data.lists[listIndex].tasks[taskIndex].subtasks[subtaskIndex]
+            )
+        } else if (!oldStatus && status) {
+            data.lists[favouriteIndex].addTask(
+                data.lists[listIndex].tasks[taskIndex].subtasks[subtaskIndex]
+            )
+        }
+
         notifyChanges()
     }
 
@@ -204,6 +233,18 @@ class ListService {
     fun deleteList(list: TaskList) {
         if (getList(list.id).isFailure) {
             return
+        }
+
+        list.tasks.forEach { it1 ->
+            it1.subtasks.forEach { it2 ->
+                if (it2.isFavourite) {
+                    data.lists[favouriteIndex].deleteTask(it2)
+                }
+            }
+
+            if (it1.isFavourite) {
+                data.lists[favouriteIndex].deleteTask(it1)
+            }
         }
 
         data.lists.remove(list)

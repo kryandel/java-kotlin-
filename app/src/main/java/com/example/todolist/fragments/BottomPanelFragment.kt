@@ -66,6 +66,15 @@ class BottomPanelFragment : Fragment() {
         viewModel.addListener(listener)
         binding = FragmentBottomPanelBinding.inflate(layoutInflater, container, false)
 
+        if (viewModel.list.value != null &&
+            (viewModel.list.value as TaskList).listType == TaskList.ListType.USER_LIST) {
+            activateButtonNew()
+            activateButtonDetails()
+        } else {
+            deactivateButtonNew()
+            deactivateButtonDetails()
+        }
+
         binding.buttonAllLists.setOnClickListener {
             //todo all lists vertical
         }

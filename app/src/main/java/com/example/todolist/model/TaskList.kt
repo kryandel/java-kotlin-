@@ -31,13 +31,17 @@ data class TaskList (
         tasks[task_id] = new_value
     }
 
-    fun deleteTask(task_id: Int) {
-        val task = getTask(task_id)
+    fun deleteTask(task: Task) {
+        val taskId = tasks.indexOf(task)
+        if (taskId == -1) {
+            return
+        }
+        val task = getTask(taskId)
         if (task.isFailure) {
             return
         }
 
-        tasks.removeAt(task_id)
+        tasks.removeAt(taskId)
     }
 
     enum class SortType {

@@ -15,12 +15,15 @@ class NewListViewModel(
             return
         }
 
-        listService.createList(TaskList(
+        val list = TaskList(
             id = listService.getListsCount(),
             name = name,
             tasks = mutableListOf(),
             sortType = TaskList.SortType.DEFAULT,
             listType = TaskList.ListType.USER_LIST
-        ))
+        )
+
+        listService.createList(list)
+        listService.selectList(list)
     }
 }
