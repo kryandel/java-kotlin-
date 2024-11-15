@@ -131,9 +131,71 @@ class ListService {
         notifyChanges()
     }
 
+    fun addToFavourite(list: TaskList, task: Task) {
+        if (task.isSubtask) {
+            addToFavourite(list, task.parentTask as Task, task)
+        }
+        val listIndex = data.lists.indexOf(list)
+        if (listIndex == -1) {
+            println("BAD LIST INDEX $listIndex")
+            return
+        }
+        val taskIndex = data.lists[listIndex].tasks.indexOf(task)
+        if (taskIndex == -1) {
+            println("BAD TASK INDEX $taskIndex")
+            return
+        }
+        val oldStatus = data.lists[listIndex].tasks[taskIndex].isFavourite
+        if (oldStatus) {
+            return
+        }
+
+        data.lists[listIndex].tasks[taskIndex].isFavourite = true
+        data.lists[favouriteIndex].addTask(data.lists[listIndex].tasks[taskIndex])
+        notifyChanges()
+    }
+
+    fun addToFavourite(list: TaskList, task: Task, subtask: Task) {
+        val listIndex = data.lists.indexOf(list)
+        if (listIndex == -1) {
+            println("BAD LIST INDEX $listIndex")
+            return
+        }
+        val taskIndex = data.lists[listIndex].tasks.indexOf(task)
+        if (taskIndex == -1) {
+            println("BAD TASK INDEX $taskIndex")
+            return
+        }
+        val subtaskIndex = data.lists[listIndex].tasks[taskIndex].subtasks.indexOf(subtask)
+        if (subtaskIndex == -1) {
+            println("BAD SUBTASK INDEX $subtaskIndex")
+            return
+        }
+        val oldStatus = data.lists[listIndex].tasks[taskIndex].subtasks[subtaskIndex].isFavourite
+        if (oldStatus) {
+            return
+        }
+
+        data.lists[listIndex].tasks[taskIndex].subtasks[subtaskIndex].isFavourite = true
+        data.lists[favouriteIndex].addTask(data.lists[listIndex].tasks[taskIndex].subtasks[subtaskIndex])
+        notifyChanges()
+    }
+
+    fun deleteFromFevourite(task: Task) {
+        val taskIndex = data.lists[favouriteIndex].tasks.indexOf(task)
+        if (taskIndex == -1) {
+            println("BAD TASK INDEX $taskIndex")
+            return
+        }
+        data.lists[favouriteIndex].tasks[taskIndex].isFavourite = false
+        data.lists[favouriteIndex].deleteTask(data.lists[favouriteIndex].tasks[taskIndex])
+        notifyChanges()
+    }
+
     fun changeFavouriteStatus(list: TaskList, task: Task, status: Boolean) {
         if (task.isSubtask) {
-            return changeFavouriteStatus(list, task.parentTask as Task, task, status)
+            changeFavouriteStatus(list, task.parentTask as Task, task, status)
+            return
         }
         val listIndex = data.lists.indexOf(list)
         val taskIndex = data.lists[listIndex].tasks.indexOf(task)
@@ -153,6 +215,11 @@ class ListService {
     fun changeFavouriteStatus(list: TaskList, task: Task, subtask: Task, status: Boolean) {
         val listIndex = data.lists.indexOf(list)
         val taskIndex = data.lists[listIndex].tasks.indexOf(task)
+        println("$listIndex $taskIndex")
+        if (taskIndex == -1) {
+            println("BAD INDEX: $taskIndex")
+            return
+        }
         val oldStatus = data.lists[listIndex].tasks[taskIndex].getSubtask(subtask).getOrThrow().isFavourite
 
         data.lists[listIndex].tasks[taskIndex].getSubtask(subtask).getOrThrow().isFavourite = status

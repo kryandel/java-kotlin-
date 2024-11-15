@@ -38,7 +38,11 @@ class SelectedListFragment : Fragment() {
 
             override fun showDetails(task: Task) {
                 if (viewModel.getList() != null) {
-                    navigator().showTaskDetails(viewModel.getList() as TaskList, task)
+                    if (task.isSubtask) {
+                        navigator().showSubtaskDetails(viewModel.getList() as TaskList, task, task.parentTask as Task)
+                    } else {
+                        navigator().showTaskDetails(viewModel.getList() as TaskList, task)
+                    }
                 }
             }
 

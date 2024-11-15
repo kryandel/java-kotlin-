@@ -11,19 +11,17 @@ class TaskDetailsViewModel(
 ) : ViewModel() {
 
     private val _subtask = MutableLiveData< Task? >()
-    private val _listId = MutableLiveData< Int >()
-    private val _taskId = MutableLiveData< Int >()
+    private val listId = MutableLiveData< Int? >()
+    private val taskId = MutableLiveData< Int? >()
     val subtask: LiveData< Task? > = _subtask
-    val listId: LiveData<Int> = _listId
-    val taskId: LiveData<Int> = _taskId
 
     fun loadSubtasks(idList: Int, idTask: Int) {
-        if (_subtask.value != null) {
+        if (subtask.value != null) {
             return
         }
 
-        _listId.value = idList
-        _taskId.value = idTask
+        listId.value = idList
+        taskId.value = idTask
 
         _subtask.value = listService.getList(idList).getOrNull()?.getTask(idTask)?.getOrNull()
     }

@@ -30,7 +30,15 @@ class MainActivity : AppCompatActivity(), Navigator {
         supportFragmentManager
             .beginTransaction()
             .addToBackStack(null)
-            .replace(R.id.fragmentContainer, TaskDetailsFragment.new(list.id, task.id))
+            .replace(R.id.fragmentContainer, TaskDetailsFragment.new(list.id, task.id, null))
+            .commit()
+    }
+
+    override fun showSubtaskDetails(list: TaskList, task: Task, subtask: Task) {
+        supportFragmentManager
+            .beginTransaction()
+            .addToBackStack(null)
+            .replace(R.id.fragmentContainer, TaskDetailsFragment.new(list.id, task.id, subtask.id))
             .commit()
     }
 

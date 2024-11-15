@@ -32,12 +32,8 @@ data class TaskList (
     }
 
     fun deleteTask(task: Task) {
-        val taskId = tasks.indexOf(task)
+        val taskId = tasks.indexOfFirst { it.id == task.id }
         if (taskId == -1) {
-            return
-        }
-        val task = getTask(taskId)
-        if (task.isFailure) {
             return
         }
 

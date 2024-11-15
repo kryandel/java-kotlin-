@@ -92,7 +92,7 @@ class TaskAdapter(
             val params = holder.binding.unwrappedItemTask.layoutParams as MarginLayoutParams
 
             if (task.isSubtask) {
-                params.leftMargin += dpToPx(50.0)
+                params.leftMargin = dpToPx(50.0)
             }
 
             holder.binding.unwrappedItemTask.layoutParams = params

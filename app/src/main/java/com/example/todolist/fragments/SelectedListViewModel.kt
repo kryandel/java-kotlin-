@@ -40,7 +40,11 @@ class SelectedListViewModel(
     }
 
     fun changeFavouriteStatus(task: Task, status: Boolean) {
-        listService.changeFavouriteStatus(listService.getSelectedList().getOrThrow(), task, status)
+        if (status) {
+            listService.addToFavourite(listService.getSelectedList().getOrThrow(), task)
+        } else {
+            listService.deleteFromFevourite(task)
+        }
     }
 
     override fun onCleared() {

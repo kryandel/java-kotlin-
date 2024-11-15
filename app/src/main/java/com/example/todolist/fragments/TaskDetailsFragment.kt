@@ -24,9 +24,11 @@ class TaskDetailsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.loadSubtasks(
-            requireArguments().getInt(ID_LIST_KEY), requireArguments().getInt(ID_TASK_KEY)
-        )
+        if (requireArguments().getInt(ID_SUBTASK_KEY) != EMPTY_SUBTASK) {
+            viewModel.loadSubtasks(
+                requireArguments().getInt(ID_LIST_KEY), requireArguments().getInt(ID_TASK_KEY)
+            )
+        }
     }
 
     override fun onCreateView(
@@ -45,28 +47,35 @@ class TaskDetailsFragment : Fragment() {
             }
         })
 
+        if (viewModel.subtask.value == null
+            || (viewModel.subtask.value != null && (viewModel.subtask.value as Task).isSubtask)) {
+            binding.sectionSubtasks.isEnabled = false
+            binding.sectionSubtasks.isVisible = false
+
+            binding.sectionAddSubtask.isEnabled = false
+            binding.sectionAddSubtask.isVisible = false
+        } else {
+            binding.sectionSubtasks.isEnabled = true
+            binding.sectionSubtasks.isVisible = true
+
+            binding.sectionAddSubtask.isEnabled = true
+            binding.sectionAddSubtask.isVisible = true
+        }
+
         binding.buttonAddSubtask.isEnabled = false
 
         binding.editNewSubtaskName.doOnTextChanged { text, _, _, _ ->
-            if (!text.isNullOrEmpty()) {
-                binding.buttonAddSubtask.isEnabled = true
-            }
+            binding.buttonAddSubtask.isEnabled = !text.isNullOrEmpty()
         }
 
         binding.buttonAddSubtask.setOnClickListener {
             viewModel.addSubtask(binding.editNewSubtaskName.text.toString())
         }
 
-        if (viewModel.subtask.value != null && (viewModel.subtask.value as Task).isSubtask) {
-            binding.sectionAddSubtask.isEnabled = false
-            binding.sectionAddSubtask.isVisible = false
-        } else {
-            binding.sectionAddSubtask.isEnabled = true
-            binding.sectionAddSubtask.isVisible = true
-        }
-
         viewModel.subtask.observe(viewLifecycleOwner, Observer {
-            adapter.subtasks = (it as Task).subtasks
+            if (it != null) {
+                adapter.subtasks = it.subtasks
+            }
         })
 
         val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -80,14 +89,21 @@ class TaskDetailsFragment : Fragment() {
 
         private const val ID_LIST_KEY = "ID_LIST_KEY"
         private const val ID_TASK_KEY = "ID_TASK_KEY"
+        private const val ID_SUBTASK_KEY = "ID_SUBTASK_KEY"
+        private const val EMPTY_SUBTASK = -1
 
         //todo
         //два аргумента подходят для Task, для SubTask нужно три
 
-        fun new(idList: Int, idTask: Int) = TaskDetailsFragment().apply {
+        fun new(idList: Int, idTask: Int, idSubtask: Int?) = TaskDetailsFragment().apply {
             arguments = Bundle().apply {
                 putInt(ID_LIST_KEY, idList)
                 putInt(ID_TASK_KEY, idTask)
+                if (idSubtask != null) {
+                    putInt(ID_SUBTASK_KEY, idSubtask)
+                } else {
+                    putInt(ID_SUBTASK_KEY, EMPTY_SUBTASK)
+                }
             }
         }
     }
