@@ -24,6 +24,7 @@ class NewTaskViewModel(
             isFavourite = favourite,
             isCompleted = false,
             isSubtask = false,
+            parentTask = null,
             subtasks = mutableListOf()
         )
         )

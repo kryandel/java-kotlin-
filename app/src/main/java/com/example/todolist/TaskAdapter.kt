@@ -1,10 +1,14 @@
 package com.example.todolist
 
+import android.content.res.Resources
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnClickListener
 import android.view.ViewGroup
+import android.view.ViewGroup.MarginLayoutParams
 import androidx.core.view.isVisible
+import androidx.core.view.marginStart
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.databinding.ItemTaskBinding
 import com.example.todolist.model.Task
@@ -19,9 +23,21 @@ class TaskAdapter(
 
     var tasks: List<Task> = emptyList()
         set(new_value) {
-            field = new_value
+            field = unwrapTask(new_value)
             notifyDataSetChanged()
         }
+
+    fun unwrapTask(list: List<Task>) : List<Task> {
+        val newList = mutableListOf<Task>()
+        list.forEach { it1 ->
+            newList.add(it1)
+            it1.subtasks.forEach { it2 ->
+                newList.add(it2)
+            }
+        }
+
+        return newList
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -30,6 +46,14 @@ class TaskAdapter(
         binding.root.setOnClickListener(this)
 
         return TaskViewHolder(binding)
+    }
+
+    private fun dpToPx(dp: Double): Int {
+        return (dp * Resources.getSystem().displayMetrics.density).toInt()
+    }
+
+    private fun pxToDp(px: Int): Double {
+        return px.toDouble() * Resources.getSystem().displayMetrics.density
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
@@ -64,6 +88,14 @@ class TaskAdapter(
                 itemTaskFavouritePickerON.isVisible = false
                 itemTaskFavouritePickerON.isEnabled = false
             }
+
+            val params = holder.binding.unwrappedItemTask.layoutParams as MarginLayoutParams
+
+            if (task.isSubtask) {
+                params.leftMargin += dpToPx(50.0)
+            }
+
+            holder.binding.unwrappedItemTask.layoutParams = params
         }
 
         holder.binding.taskName.setOnClickListener {

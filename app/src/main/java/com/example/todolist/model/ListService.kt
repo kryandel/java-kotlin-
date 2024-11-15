@@ -108,11 +108,14 @@ class ListService {
             data.lists[favouriteIndex].addTask(subtask)
         }
 
-        data.lists[listIndex].tasks[taskIndex].subtasks.add(subtask)
+        data.lists[listIndex].tasks[taskIndex].addSubTask(subtask)
         notifyChanges()
     }
 
     fun changeCompleteStatus(list: TaskList, task: Task, status: Boolean) {
+        if (task.isSubtask) {
+            return changeCompleteStatus(list, task.parentTask as Task, task, status)
+        }
         val listIndex = data.lists.indexOf(list)
         val taskIndex = data.lists[listIndex].tasks.indexOf(task)
 
@@ -123,13 +126,15 @@ class ListService {
     fun changeCompleteStatus(list: TaskList, task: Task, subtask: Task, status: Boolean) {
         val listIndex = data.lists.indexOf(list)
         val taskIndex = data.lists[listIndex].tasks.indexOf(task)
-        val subtaskIndex = data.lists[listIndex].tasks[taskIndex].subtasks.indexOf(subtask)
 
-        data.lists[listIndex].tasks[taskIndex].subtasks[subtaskIndex].isCompleted = status
+        data.lists[listIndex].tasks[taskIndex].getSubTask(subtask).getOrThrow().isCompleted = status
         notifyChanges()
     }
 
     fun changeFavouriteStatus(list: TaskList, task: Task, status: Boolean) {
+        if (task.isSubtask) {
+            return changeFavouriteStatus(list, task.parentTask as Task, task, status)
+        }
         val listIndex = data.lists.indexOf(list)
         val taskIndex = data.lists[listIndex].tasks.indexOf(task)
         val oldStatus = data.lists[listIndex].tasks[taskIndex].isFavourite
@@ -148,17 +153,16 @@ class ListService {
     fun changeFavouriteStatus(list: TaskList, task: Task, subtask: Task, status: Boolean) {
         val listIndex = data.lists.indexOf(list)
         val taskIndex = data.lists[listIndex].tasks.indexOf(task)
-        val subtaskIndex = data.lists[listIndex].tasks[taskIndex].subtasks.indexOf(subtask)
-        val oldStatus = data.lists[listIndex].tasks[taskIndex].subtasks[subtaskIndex].isFavourite
+        val oldStatus = data.lists[listIndex].tasks[taskIndex].getSubTask(subtask).getOrThrow().isFavourite
 
-        data.lists[listIndex].tasks[taskIndex].subtasks[subtaskIndex].isFavourite = status
+        data.lists[listIndex].tasks[taskIndex].getSubTask(subtask).getOrThrow().isFavourite = status
         if (oldStatus && !status) {
             data.lists[favouriteIndex].deleteTask(
-                data.lists[listIndex].tasks[taskIndex].subtasks[subtaskIndex]
+                data.lists[listIndex].tasks[taskIndex].getSubTask(subtask).getOrThrow()
             )
         } else if (!oldStatus && status) {
             data.lists[favouriteIndex].addTask(
-                data.lists[listIndex].tasks[taskIndex].subtasks[subtaskIndex]
+                data.lists[listIndex].tasks[taskIndex].getSubTask(subtask).getOrThrow()
             )
         }
 
@@ -181,6 +185,36 @@ class ListService {
             tasks = mutableListOf(),
             sortType = TaskList.SortType.DEFAULT,
             listType = TaskList.ListType.FAVOURITE
+        ))
+        val tasks = mutableListOf<Task>()
+        tasks.add(Task(
+            id = 10,
+            name = "dffdf",
+            date = 0,
+            description = "",
+            isFavourite = false,
+            isCompleted = false,
+            isSubtask = false,
+            parentTask = null,
+            subtasks = mutableListOf()
+        ))
+        tasks[0].subtasks.add(Task(
+            id = 100,
+            name = "sub",
+            date = 1,
+            description = "",
+            isFavourite = false,
+            isCompleted = false,
+            isSubtask = true,
+            parentTask = tasks[0],
+            subtasks = mutableListOf()
+        ))
+        data.lists.add(TaskList(
+            id = 2,
+            name = "def",
+            tasks = tasks,
+            sortType = TaskList.SortType.DEFAULT,
+            listType = TaskList.ListType.USER_LIST
         ))
         data.lists.add(TaskList(
             id = 1,

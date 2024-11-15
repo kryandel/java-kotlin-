@@ -1,4 +1,6 @@
 package com.example.todolist.fragments
 
-class TaskDetailsFragment {
+import androidx.fragment.app.Fragment
+
+class TaskDetailsFragment : Fragment() {
 }
