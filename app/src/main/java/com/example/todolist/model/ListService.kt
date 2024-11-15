@@ -74,7 +74,7 @@ class ListService(
             }
 
             if (lists.isNotEmpty()) {
-                data.lists = lists
+                data.lists = lists.sortedBy { list -> list.listType } as MutableList
                 dataLoaded = true
                 notifyChanges()
             } else {
@@ -92,6 +92,76 @@ class ListService(
     private fun saveListOnFirestore(list: TaskList) {
         database.collection(TAG).add(list).addOnSuccessListener {
             Log.d(TAG, "Added favourite document: ${it.id}")
+            notifyChanges()
+        }
+    }
+
+    private fun deleteListFromDatabase(list: TaskList) {
+        deleteListFromFirestore(list)
+    }
+
+    private fun deleteListFromFirestore(list: TaskList) {
+        database.collection(TAG).add(list).addOnSuccessListener {
+            Log.d(TAG, "Added favourite document: ${it.id}")
+        }
+        database.collection(TAG).whereEqualTo("id", list.id).get().addOnSuccessListener {
+            it.forEach { doc ->
+                database.collection(TAG).document(doc.id).delete().addOnSuccessListener {
+                    Log.d(TAG, "SUCCESS DELETE DOCUMENT: ${doc.id}")
+                    notifyChanges()
+                }
+            }
+        }
+    }
+
+    private fun saveTaskOnDatabase(list: TaskList, task: Task) {
+        saveTaskOnFirestore(list, task)
+    }
+
+    private fun saveTaskOnFirestore(list: TaskList, task: Task) {
+        val newList = list.copy().apply {
+            tasks.add(task)
+        }
+        database.collection(TAG).whereEqualTo("id", list.id).get().addOnSuccessListener {
+            it.forEach { doc ->
+                database.collection(TAG).document(doc.id).set(newList).addOnSuccessListener {
+                    Log.d(TAG, "SUCCESS UPDATE DOCUMENT: ${doc.id}")
+                    notifyChanges()
+                }
+            }
+        }
+    }
+
+    private fun updateListOnDatabase(list: TaskList) {
+        updateListOnFirestore(list)
+    }
+
+    private fun updateListOnFirestore(list: TaskList) {
+        database.collection(TAG).whereEqualTo("id", list.id).get().addOnSuccessListener {
+            it.forEach { doc ->
+                database.collection(TAG).document(doc.id).set(list).addOnSuccessListener {
+                    Log.d(TAG, "SUCCESS UPDATE DOCUMENT")
+                    notifyChanges()
+                }
+            }
+        }
+    }
+
+    private fun updateTaskOnDatabase(list: TaskList, task: Task) {
+        updateTaskOnFirestore(list, task)
+    }
+
+    private fun updateTaskOnFirestore(list: TaskList, task: Task) {
+        val newList = list.copy().apply {
+            tasks[tasks.indexOfFirst { it.id == task.id }] = task
+        }
+        database.collection(TAG).whereEqualTo("id", list.id).get().addOnSuccessListener {
+            it.forEach { doc ->
+                database.collection(TAG).document(doc.id).set(newList).addOnSuccessListener {
+                    Log.d(TAG, "SUCCESS UPDATE DOCUMENT")
+                    notifyChanges()
+                }
+            }
         }
     }
 
@@ -168,7 +238,7 @@ class ListService(
     }
 
     fun isFavouriteList(list: TaskList): Boolean {
-        return list == data.lists[favouriteIndex]
+        return list == getFavouriteList()
     }
 
     fun getList(id: Int) : Result<TaskList> {
@@ -182,8 +252,8 @@ class ListService(
         ))
     }
 
-    fun getLists() : List<TaskList> {
-        return data.lists
+    fun getFavouriteList(): TaskList {
+        return data.lists.first { it.listType == TaskList.ListType.FAVOURITE }
     }
 
     fun getListsCount() : Int {
@@ -202,11 +272,14 @@ class ListService(
         val index = data.lists.indexOf(list)
 
         if (task.isFavourite) {
-            data.lists[favouriteIndex].addTask(task)
+            //data.lists[favouriteIndex].addTask(task)
+            saveTaskOnFirestore(getFavouriteList(), task)
         }
 
-        data.lists[index].addTask(task)
-        notifyChanges()
+        //data.lists[index].addTask(task)
+        saveTaskOnFirestore(list, task)
+
+        //notifyChanges()
     }
 
     fun addSubTask(list: TaskList, task: Task, subtask: Task) {
@@ -228,16 +301,25 @@ class ListService(
         val listIndex = data.lists.indexOf(list)
         val taskIndex = data.lists[listIndex].tasks.indexOf(task)
 
-        data.lists[listIndex].tasks[taskIndex].isCompleted = status
-        notifyChanges()
+        //data.lists[listIndex].tasks[taskIndex].isCompleted = status
+        if (task.isFavourite) {
+            updateTaskOnDatabase(getFavouriteList(), task.copy().apply { isCompleted = status })
+        }
+        updateTaskOnDatabase(list, task.copy().apply { isCompleted = status })
+        //notifyChanges()
     }
 
     fun changeCompleteStatus(list: TaskList, task: Task, subtask: Task, status: Boolean) {
         val listIndex = data.lists.indexOf(list)
         val taskIndex = data.lists[listIndex].tasks.indexOf(task)
 
-        data.lists[listIndex].tasks[taskIndex].getSubtask(subtask).getOrThrow().isCompleted = status
-        notifyChanges()
+        //data.lists[listIndex].tasks[taskIndex].getSubtask(subtask).getOrThrow().isCompleted = status
+        if (task.isFavourite) {
+            updateTaskOnDatabase(getFavouriteList(), subtask.copy().apply { isCompleted = status })
+        }
+        updateTaskOnDatabase(list, task.copy().apply { subtasks[subtasks.indexOf(subtask)].isCompleted = status })
+        //todo если обновляется значение через favourite - в основном списке не обновляется
+        //notifyChanges()
     }
 
     fun addToFavourite(list: TaskList, task: Task) {
@@ -259,9 +341,12 @@ class ListService(
             return
         }
 
-        data.lists[listIndex].tasks[taskIndex].isFavourite = true
-        data.lists[favouriteIndex].addTask(data.lists[listIndex].tasks[taskIndex])
-        notifyChanges()
+        val taskToSave = task.copy().apply { isFavourite = true }
+        //data.lists[listIndex].tasks[taskIndex].isFavourite = true
+        updateTaskOnDatabase(list, taskToSave)
+        //data.lists[favouriteIndex].addTask(data.lists[listIndex].tasks[taskIndex])
+        saveTaskOnDatabase(getFavouriteList(), taskToSave)
+        //notifyChanges()
     }
 
     fun addToFavourite(list: TaskList, task: Task, subtask: Task) {
@@ -285,20 +370,24 @@ class ListService(
             return
         }
 
-        data.lists[listIndex].tasks[taskIndex].subtasks[subtaskIndex].isFavourite = true
-        data.lists[favouriteIndex].addTask(data.lists[listIndex].tasks[taskIndex].subtasks[subtaskIndex])
-        notifyChanges()
+        //data.lists[listIndex].tasks[taskIndex].subtasks[subtaskIndex].isFavourite = true
+        updateTaskOnDatabase(list, task.copy().apply { subtasks[subtasks.indexOf(subtask)].isFavourite = true })
+        //data.lists[favouriteIndex].addTask(data.lists[listIndex].tasks[taskIndex].subtasks[subtaskIndex])
+        saveTaskOnDatabase(getFavouriteList(), subtask.copy().apply { isFavourite = true })
+        //notifyChanges()
     }
 
-    fun deleteFromFevourite(task: Task) {
+    fun deleteFromFavourite(task: Task) {
         val taskIndex = data.lists[favouriteIndex].tasks.indexOf(task)
         if (taskIndex == -1) {
             println("BAD TASK INDEX $taskIndex")
             return
         }
-        data.lists[favouriteIndex].tasks[taskIndex].isFavourite = false
-        data.lists[favouriteIndex].deleteTask(data.lists[favouriteIndex].tasks[taskIndex])
-        notifyChanges()
+        //data.lists[favouriteIndex].tasks[taskIndex].isFavourite = false
+        //todo бновить значение в основном списке. как?
+        //data.lists[favouriteIndex].deleteTask(data.lists[favouriteIndex].tasks[taskIndex])
+        updateListOnDatabase(getFavouriteList().copy().apply { tasks.remove(task) })
+        //notifyChanges()
     }
 
     fun getTasksCount(list: TaskList) : Result<Int> {
@@ -315,8 +404,9 @@ class ListService(
         if (index == -1) {
             return
         }
-        data.lists[index] = newValue
-        notifyChanges()
+        //data.lists[index] = newValue
+        updateListOnDatabase(newValue)
+        //notifyChanges()
     }
 
     fun deleteList(list: TaskList) {
@@ -327,16 +417,20 @@ class ListService(
         list.tasks.forEach { it1 ->
             it1.subtasks.forEach { it2 ->
                 if (it2.isFavourite) {
-                    data.lists[favouriteIndex].deleteTask(it2)
+                    //data.lists[favouriteIndex].deleteTask(it2)
+                    updateListOnDatabase(getFavouriteList().copy().apply { tasks.remove(it2) })
                 }
             }
 
             if (it1.isFavourite) {
-                data.lists[favouriteIndex].deleteTask(it1)
+                //data.lists[favouriteIndex].deleteTask(it1)
+                updateListOnDatabase(getFavouriteList().copy().apply { tasks.remove(it1) })
             }
         }
 
-        data.lists.remove(list)
-        notifyChanges()
+        //data.lists.remove(list)
+        deleteListFromDatabase(list)
+        //todo select new list
+        //notifyChanges()
     }
 }

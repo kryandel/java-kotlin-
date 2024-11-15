@@ -48,7 +48,7 @@ class SelectedListViewModel(
         if (status) {
             listService.addToFavourite(listService.getSelectedList().getOrThrow(), task)
         } else {
-            listService.deleteFromFevourite(task)
+            listService.deleteFromFavourite(task)
         }
     }
 

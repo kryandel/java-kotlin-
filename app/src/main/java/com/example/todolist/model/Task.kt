@@ -1,15 +1,15 @@
 package com.example.todolist.model
 
 data class Task (
-    val id: Int,
-    var name: String,
-    var date: Long,
-    var description : String,
-    var isFavourite: Boolean,
-    var isCompleted: Boolean,
-    var isSubtask: Boolean,
-    var parentTask: Task?,
-    val subtasks: MutableList<Task>,
+    val id: Int = -1,
+    var name: String = "",
+    var date: Long = 0,
+    var description : String = "",
+    var isFavourite: Boolean = false,
+    var isCompleted: Boolean = false,
+    var isSubtask: Boolean = false,
+    var parentTask: Task? = null,
+    val subtasks: MutableList<Task> = mutableListOf(),
 ) {
     fun toMap() = hashMapOf(
         "id" to id,

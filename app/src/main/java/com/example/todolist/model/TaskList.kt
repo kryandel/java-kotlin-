@@ -56,8 +56,8 @@ data class TaskList (
     }
 
     enum class ListType {
-        USER_LIST,
         FAVOURITE,
+        USER_LIST,
         NEW_BUTTON
     }
 }
