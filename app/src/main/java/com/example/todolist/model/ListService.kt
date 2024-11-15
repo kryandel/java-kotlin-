@@ -1,10 +1,13 @@
 package com.example.todolist.model
 
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Collections
 
 typealias ListListener = (data : ListService.ListServiceData) -> Unit
 
-class ListService {
+class ListService(
+    private val database: FirebaseFirestore
+) {
 
     data class ListServiceData (
         var lists: MutableList<TaskList>,
@@ -213,36 +216,7 @@ class ListService {
             sortType = TaskList.SortType.DEFAULT,
             listType = TaskList.ListType.FAVOURITE
         ))
-        val tasks = mutableListOf<Task>()
-        tasks.add(Task(
-            id = 10,
-            name = "dffdf",
-            date = 0,
-            description = "",
-            isFavourite = false,
-            isCompleted = false,
-            isSubtask = false,
-            parentTask = null,
-            subtasks = mutableListOf()
-        ))
-        tasks[0].subtasks.add(Task(
-            id = 100,
-            name = "sub",
-            date = 1,
-            description = "",
-            isFavourite = false,
-            isCompleted = false,
-            isSubtask = true,
-            parentTask = tasks[0],
-            subtasks = mutableListOf()
-        ))
-        data.lists.add(TaskList(
-            id = 2,
-            name = "def",
-            tasks = tasks,
-            sortType = TaskList.SortType.DEFAULT,
-            listType = TaskList.ListType.USER_LIST
-        ))
+
         data.lists.add(TaskList(
             id = 1,
             name = "Создать список",
@@ -250,31 +224,6 @@ class ListService {
             sortType = TaskList.SortType.DEFAULT,
             listType = TaskList.ListType.NEW_BUTTON
         ))
-        /*data.lists = (1..9).map { TaskList(
-            id = it,
-            name = it.toString(),
-            tasks = mutableListOf(
-                Task(
-                    id = 0,
-                    name = "default task" + it.toString(),
-                    date = 0,
-                    description = "",
-                    isFavourite = (it % 2) == 1,
-                    isCompleted = (it % 2) == 0,
-                    isSubtask = false,
-                    subtasks = mutableListOf()
-                )),
-            sortType = TaskList.SortType.DEFAULT,
-            listType = TaskList.ListType.USER_LIST
-        ) }.toMutableList()
-
-        data.lists.add(TaskList(
-            id = 10,
-            name = "Создать список",
-            tasks = mutableListOf(),
-            sortType = TaskList.SortType.DEFAULT,
-            listType = TaskList.ListType.NEW_BUTTON
-        ))*/
 
         dataLoaded = true
         data.selectedList = data.lists[0]

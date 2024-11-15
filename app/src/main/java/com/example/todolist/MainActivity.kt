@@ -4,12 +4,19 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.todolist.databinding.ActivityMainBinding
 import com.example.todolist.fragments.*
+import com.example.todolist.model.ListService
 import com.example.todolist.model.TaskList
 import com.example.todolist.model.Task
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity(), Navigator {
 
     private lateinit var binding : ActivityMainBinding
+
+    private val database = Firebase.firestore
+    val listService = ListService(database)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
