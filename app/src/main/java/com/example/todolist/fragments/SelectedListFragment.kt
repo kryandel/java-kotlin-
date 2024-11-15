@@ -49,7 +49,18 @@ class SelectedListFragment : Fragment() {
         })
 
         viewModel.tasks.observe(viewLifecycleOwner, Observer {
-            adapter.tasks = it
+            if (viewModel.isFavouriteList()) {
+                adapter.tasks = it
+            } else {
+                val list = mutableListOf<Task>()
+                it.forEach { it1 ->
+                    list.add(it1)
+                    it1.subtasks.forEach { it2 ->
+                        list.add(it2)
+                    }
+                }
+                adapter.tasks = list
+            }
         })
 
         val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)

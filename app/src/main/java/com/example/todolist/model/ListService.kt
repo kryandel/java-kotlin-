@@ -62,6 +62,10 @@ class ListService {
         }
     }
 
+    fun isFavouriteList(list: TaskList): Boolean {
+        return list == data.lists[favouriteIndex]
+    }
+
     fun getList(id: Int) : Result<TaskList> {
         val index = data.lists.indexOfFirst { it.id == id }
         if (index != -1) {
@@ -189,50 +193,6 @@ class ListService {
         }
         data.lists[favouriteIndex].tasks[taskIndex].isFavourite = false
         data.lists[favouriteIndex].deleteTask(data.lists[favouriteIndex].tasks[taskIndex])
-        notifyChanges()
-    }
-
-    fun changeFavouriteStatus(list: TaskList, task: Task, status: Boolean) {
-        if (task.isSubtask) {
-            changeFavouriteStatus(list, task.parentTask as Task, task, status)
-            return
-        }
-        val listIndex = data.lists.indexOf(list)
-        val taskIndex = data.lists[listIndex].tasks.indexOf(task)
-        val oldStatus = data.lists[listIndex].tasks[taskIndex].isFavourite
-
-        data.lists[listIndex].tasks[taskIndex].isFavourite = status
-
-        if (oldStatus && !status) {
-            data.lists[favouriteIndex].deleteTask(data.lists[listIndex].tasks[taskIndex])
-        } else if (!oldStatus && status) {
-            data.lists[favouriteIndex].addTask(data.lists[listIndex].tasks[taskIndex])
-        }
-
-        notifyChanges()
-    }
-
-    fun changeFavouriteStatus(list: TaskList, task: Task, subtask: Task, status: Boolean) {
-        val listIndex = data.lists.indexOf(list)
-        val taskIndex = data.lists[listIndex].tasks.indexOf(task)
-        println("$listIndex $taskIndex")
-        if (taskIndex == -1) {
-            println("BAD INDEX: $taskIndex")
-            return
-        }
-        val oldStatus = data.lists[listIndex].tasks[taskIndex].getSubtask(subtask).getOrThrow().isFavourite
-
-        data.lists[listIndex].tasks[taskIndex].getSubtask(subtask).getOrThrow().isFavourite = status
-        if (oldStatus && !status) {
-            data.lists[favouriteIndex].deleteTask(
-                data.lists[listIndex].tasks[taskIndex].getSubtask(subtask).getOrThrow()
-            )
-        } else if (!oldStatus && status) {
-            data.lists[favouriteIndex].addTask(
-                data.lists[listIndex].tasks[taskIndex].getSubtask(subtask).getOrThrow()
-            )
-        }
-
         notifyChanges()
     }
 

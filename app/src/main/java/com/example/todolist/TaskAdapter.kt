@@ -23,21 +23,9 @@ class TaskAdapter(
 
     var tasks: List<Task> = emptyList()
         set(new_value) {
-            field = unwrapTask(new_value)
+            field = new_value
             notifyDataSetChanged()
         }
-
-    fun unwrapTask(list: List<Task>) : List<Task> {
-        val newList = mutableListOf<Task>()
-        list.forEach { it1 ->
-            newList.add(it1)
-            it1.subtasks.forEach { it2 ->
-                newList.add(it2)
-            }
-        }
-
-        return newList
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -93,6 +81,8 @@ class TaskAdapter(
 
             if (task.isSubtask) {
                 params.leftMargin = dpToPx(50.0)
+            } else {
+                params.leftMargin = dpToPx(0.0)
             }
 
             holder.binding.unwrappedItemTask.layoutParams = params

@@ -35,6 +35,11 @@ class SelectedListViewModel(
         }
     }
 
+    fun isFavouriteList(): Boolean {
+        val list = getList() ?: return false
+        return listService.isFavouriteList(list)
+    }
+
     fun changeCompleteStatus(task: Task, status: Boolean) {
         listService.changeCompleteStatus(listService.getSelectedList().getOrThrow(), task, status)
     }
