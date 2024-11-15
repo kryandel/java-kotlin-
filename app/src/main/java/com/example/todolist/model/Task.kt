@@ -11,6 +11,18 @@ data class Task (
     var parentTask: Task?,
     val subtasks: MutableList<Task>,
 ) {
+    fun toMap() = hashMapOf(
+        "id" to id,
+        "name" to name,
+        "date" to date,
+        "description" to description,
+        "isFavourite" to isFavourite,
+        "isCompleted" to isCompleted,
+        "isSubtask" to isSubtask,
+        "parentTask" to parentTask,
+        "subtasks" to subtasks
+    )
+
     fun addSubtask(subtask: Task) {
         subtasks.add(subtask)
     }

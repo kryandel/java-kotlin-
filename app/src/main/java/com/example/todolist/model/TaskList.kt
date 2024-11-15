@@ -7,6 +7,14 @@ data class TaskList (
     var sortType: SortType,
     var listType: ListType
 ) {
+    fun toMap() = hashMapOf(
+        "id" to id,
+        "name" to name,
+        "tasks" to tasks,
+        "sortType" to sortType,
+        "listType" to listType
+    )
+
     fun addTask(task: Task) {
         tasks.add(task)
     }
